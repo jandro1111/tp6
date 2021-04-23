@@ -9,8 +9,6 @@ int main()
         cout << "fallo alegro init"<<endl;
     }
     else {
-        al_rest(2.0);
-
         mylcd prueba;
         prueba << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
         prueba.printdisp();

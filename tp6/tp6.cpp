@@ -1,12 +1,11 @@
 // tp6.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include"lcd.h"
+#include"mylcd.h"
 using namespace std;
 int main()
 {
     mylcd prueba;
-    basicLCD* prueba1 = &prueba;
     prueba <<"mucho texto This file contains the 'main' function. Program execution begins and ends there.";
     prueba.printdisp();
     prueba << 'h' << 'o' << 'l' << 'a';

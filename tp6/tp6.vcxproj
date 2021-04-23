@@ -140,12 +140,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="allegro.cpp" />
-    <ClCompile Include="lcd.cpp" />
+    <ClCompile Include="mylcd.cpp" />
     <ClCompile Include="tp6.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allegro.h" />
-    <ClInclude Include="lcd.h" />
+    <ClInclude Include="basicLCD.h" />
+    <ClInclude Include="mylcd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

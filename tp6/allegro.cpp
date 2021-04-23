@@ -1,1 +1,4 @@
 #include "allegro.h"
+
+
+//aldrawtext

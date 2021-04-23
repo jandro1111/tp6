@@ -18,7 +18,7 @@
     <ClCompile Include="tp6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lcd.cpp">
+    <ClCompile Include="mylcd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="allegro.cpp">
@@ -26,10 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lcd.h">
+    <ClInclude Include="mylcd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="allegro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basicLCD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -141,12 +141,14 @@
   <ItemGroup>
     <ClCompile Include="allegro.cpp" />
     <ClCompile Include="mylcd.cpp" />
+    <ClCompile Include="PanaLCD.cpp" />
     <ClCompile Include="tp6.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allegro.h" />
     <ClInclude Include="basicLCD.h" />
     <ClInclude Include="mylcd.h" />
+    <ClInclude Include="PanaLCD.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="7SDD.TTF" />

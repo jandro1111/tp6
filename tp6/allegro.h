@@ -1,11 +1,11 @@
 #pragma once
 #ifndef _ALLEGRO_H
 #define _ALLEGRO_H
-#include<stdio.h>
-#include <allegro5/allegro.h>
-#include<allegro5/allegro_font.h>
-#include<allegro5/allegro_image.h>
-#include<allegro5/allegro_ttf.h>
+#include <stdio.h>
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
 
 #define W_PIXELS	360				// tamaño del display
 #define H_PIXELS	70

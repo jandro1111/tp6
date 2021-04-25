@@ -1,7 +1,10 @@
 // tp6.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include"mylcd.h"
+#include "mylcd.h"
+#include "PanaLCD.h"
+
+
 using namespace std;
 int main()
 {
@@ -9,26 +12,28 @@ int main()
         cout << "fallo alegro init"<<endl;
     }
     else {
-        mylcd prueba;
+        PanaLCD prueba(2, 16);
         prueba << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        prueba.printdisp();
+        //prueba.printdisp();
         al_rest(2.0);
         prueba << 'h' << 'o' << 'l' << 'a';
-        prueba.printdisp();
+        prueba.lcdSetCursorPosition(cursorPosition{ 2, 5 });
+        //prueba.printdisp();
         al_rest(2.0);
-        prueba << "mucho texto";
-        prueba.printdisp();
+        prueba << "pepefrgygfhfghffgb,bmbmbmbmbmbh";
+        //prueba.printdisp();
         al_rest(2.0);
-        prueba.lcdMoveCursorUp();
+        //prueba.lcdMoveCursorUp();
+        prueba.lcdSetCursorPosition(cursorPosition{ 1, 5 });
         prueba.lcdClearToEOL();
-        prueba << "algo";
-        prueba.printdisp();
+        //prueba << "algo";
+        //prueba.printdisp();
         al_rest(2.0);
         prueba.lcdClear();
         prueba << "esto anda bien";
-        prueba.printdisp();
+       // prueba.printdisp();
         al_rest(2.0);
-        prueba.printcursor();
+       // prueba.printcursor();
         destroy_allegro();
     }
     return 0;

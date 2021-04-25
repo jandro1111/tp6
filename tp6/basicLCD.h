@@ -1,6 +1,10 @@
 #pragma once
 #ifndef _BASICLCD_H
 #define _BASICLCD_H
+
+#include <iostream>
+
+
 struct cursorPosition
 {
 	int row;

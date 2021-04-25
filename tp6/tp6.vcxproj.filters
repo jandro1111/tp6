@@ -24,6 +24,9 @@
     <ClCompile Include="allegro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PanaLCD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mylcd.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basicLCD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PanaLCD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

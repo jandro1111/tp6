@@ -13,27 +13,40 @@ int main()
     }
     else {
         PanaLCD prueba(2, 16, 100, 100);
-        prueba << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        //prueba.printdisp();
+        mylcd prueba2;
+
+        basicLCD* lcds[3] = { (basicLCD*)&prueba, (basicLCD*)&prueba2, nullptr };
+        *lcds[0] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
+        *lcds[1] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
+        prueba2.printdisp();
         al_rest(2.0);
-        prueba << 'h' << 'o' << 'l' << 'a';
-        prueba.lcdSetCursorPosition(cursorPosition{ 2, 5 });
-        //prueba.printdisp();
+        *lcds[0] << 'h' << 'o' << 'l' << 'a';
+        lcds[0]->lcdSetCursorPosition(cursorPosition{ 2, 5 });
+        *lcds[1] << 'h' << 'o' << 'l' << 'a';
+        lcds[1]->lcdSetCursorPosition(cursorPosition{ 2, 5 });
+        prueba2.printdisp();
         al_rest(2.0);
-        prueba << "pepefrgygfhfghffgb,bmbmbmbmbmbh";
-        //prueba.printdisp();
+        *lcds[0] << "pepefrgygfhfghffgb,bmbmbmbmbmbh";
+        *lcds[1] << "pepefrgygfhfghffgb,bmbmbmbmbmbh";
+        prueba2.printdisp();
         al_rest(2.0);
-        //prueba.lcdMoveCursorUp();
-        prueba.lcdSetCursorPosition(cursorPosition{ 1, 5 });
-        prueba.lcdClearToEOL();
-        //prueba << "algo";
-        //prueba.printdisp();
+        lcds[0]->lcdMoveCursorUp();
+        lcds[0]->lcdSetCursorPosition(cursorPosition{ 1, 5 });
+        lcds[0]->lcdClearToEOL();
+        *lcds[0] << "algo";
+        lcds[1]->lcdMoveCursorUp();
+        lcds[1]->lcdSetCursorPosition(cursorPosition{ 1, 5 });
+        lcds[1]->lcdClearToEOL();
+        *lcds[1] << "algo";
+        prueba2.printdisp();
         al_rest(2.0);
-        prueba.lcdClear();
-        prueba << "esto anda bien";
-       // prueba.printdisp();
+        lcds[0]->lcdClear();
+        *lcds[0] << "esto anda bien";
+        lcds[1]->lcdClear();
+        *lcds[1] << "esto anda bien";
+        prueba2.printdisp();
         al_rest(2.0);
-       // prueba.printcursor();
+        prueba2.printcursor();
         destroy_allegro();
     }
     return 0;

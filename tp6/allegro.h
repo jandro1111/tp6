@@ -7,8 +7,8 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_ttf.h>
 
-#define W_PIXELS	360				// tamaño del display
-#define H_PIXELS	70
+#define W_PIXELS	1280				// tamaño del display
+#define H_PIXELS	720
 
 //Funcion que le da la bienvenida al usuario por allegro
 int init_allegro();

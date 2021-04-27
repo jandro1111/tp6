@@ -11,7 +11,7 @@ class PanaLCD :
 public:
     // Inherited via basicLCD
 
-    PanaLCD(int rows, int columns);
+    PanaLCD(int rows, int columns, int offsetX, int offsetY);
 
     virtual bool lcdInitOk() override;
     virtual lcdError& lcdGetError() override;
@@ -34,6 +34,8 @@ private:
     lcdError error;
     int rowQuant;
     int columnQuant;
+    int screenOffsetX;
+    int screenOffsetY;
     std::string lcdText;
     
 };

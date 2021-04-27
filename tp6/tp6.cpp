@@ -12,7 +12,7 @@ int main()
         cout << "fallo alegro init"<<endl;
     }
     else {
-        PanaLCD prueba(2, 16);
+        PanaLCD prueba(2, 16, 100, 100);
         prueba << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
         //prueba.printdisp();
         al_rest(2.0);

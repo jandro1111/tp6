@@ -1,9 +1,11 @@
 #include "PanaLCD.h"
 
-PanaLCD::PanaLCD(int rows, int columns) : lcdText(" "),
+PanaLCD::PanaLCD(int rows, int columns, int offsetX, int offsetY) : lcdText(" "),
                                         cursorPos{ 1, 1},
                                         rowQuant(rows),
-                                        columnQuant(columns)
+                                        columnQuant(columns),
+                                        screenOffsetX(offsetX),
+                                        screenOffsetY(offsetY)
 {
     this->lcdText.resize(rowQuant* columnQuant, ' ');
     this->lcdClear();
@@ -22,6 +24,7 @@ lcdError& PanaLCD::lcdGetError()
 bool PanaLCD::lcdClear()
 {
     this->lcdText.replace(0 , this->rowQuant * this->columnQuant, this->rowQuant * this->columnQuant, ' ');
+    this->cursorPos = cursorPosition{ 1, 1 };
     this->redraw();
     return true;
 }
@@ -37,6 +40,7 @@ bool PanaLCD::lcdClearToEOL()
         
         return false;
     }
+
     redraw();
     return true;
 }
@@ -44,6 +48,19 @@ bool PanaLCD::lcdClearToEOL()
 basicLCD& PanaLCD::operator<<(const unsigned char c)
 {
     this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, 1, 1, c);
+
+    if (!this->lcdMoveCursorRight())
+    {
+        if (this->lcdMoveCursorDown())
+        {
+            cursorPos.column = 1;
+        }
+        else
+        {
+            cursorPos = cursorPosition{ 1, 1 };
+        }
+    }
+
     redraw();
     return *this;
 }
@@ -149,9 +166,9 @@ bool PanaLCD::redraw()
  
     for (int i = 0; i < rowQuant; ++i) {
         auxStr = this->lcdText.substr(i * columnQuant, columnQuant);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 0, i* al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, auxStr.c_str());
+        al_draw_text(font, al_map_rgb(0, 0, 0), screenOffsetX, screenOffsetY + i* al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, auxStr.c_str());
     }
-    al_draw_text(font, al_map_rgb(0, 0, 255), (cursorPos.column - 1) * al_get_text_width(font, " "), (cursorPos.row - 1) * al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, lcdText.substr((cursorPos.row - 1) * columnQuant + cursorPos.column - 1, 1).c_str());
+    al_draw_text(font, al_map_rgb(0, 0, 255), screenOffsetX + (cursorPos.column - 1) * al_get_text_width(font, " "), screenOffsetY + (cursorPos.row - 1) * al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, lcdText.substr((cursorPos.row - 1) * columnQuant + cursorPos.column - 1, 1).c_str());
     al_flip_display();
     return false;
 }

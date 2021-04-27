@@ -6,7 +6,7 @@
 #include"allegro.h"
 #include"basicLCD.h"
 #define FILMAX 2
-#define COLMAX 20
+#define COLMAX 16
 
 class mylcd :public basicLCD {
 public:

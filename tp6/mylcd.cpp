@@ -40,7 +40,7 @@ bool mylcd::lcdClear() {
 }
 bool mylcd::lcdClearToEOL() {
 	bool succed = true;
-	for (int j = 0; j < COLMAX; ++j) {
+	for (int j = cursor.column; j < COLMAX; ++j) {
 		disp[cursor.row][j] = 0;
 	}
 	cursor.column = 0;
@@ -48,7 +48,7 @@ bool mylcd::lcdClearToEOL() {
 }
 basicLCD& mylcd::operator<<( const unsigned char c)
 {
-	if ((this->cursor.row==1) && (this->cursor.column==19)) {//no avanzo el cursor
+	if ((this->cursor.row==(FILMAX-1)) && (this->cursor.column==(COLMAX-1))) {//no avanzo el cursor
 		if ((c >= ' ') && (c <= '~')) {//si es un caracter imprimible
 			this->disp[this->cursor.row][this->cursor.column] = c;
 		}

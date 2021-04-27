@@ -70,11 +70,14 @@ basicLCD& PanaLCD::operator<<(const char* c)
     std::string auxString(c);
     if (auxString.length() > (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)))
     {
-        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1, auxString, 0, rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1);
+        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1, auxString, auxString.length() - (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)) - 1, auxString.length());
+        cursorPos = cursorPosition{ 1, 1 };
     }
     else
     {
         this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, auxString.length(), auxString);
+        cursorPos.row += auxString.length() / rowQuant;
+        cursorPos.column += auxString.length() % columnQuant;
     }
     redraw();
     return *this;

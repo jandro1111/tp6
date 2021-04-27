@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="allegro.cpp" />
+    <ClCompile Include="micholcd.cpp" />
     <ClCompile Include="mylcd.cpp" />
     <ClCompile Include="PanaLCD.cpp" />
     <ClCompile Include="tp6.cpp" />
@@ -147,11 +148,13 @@
   <ItemGroup>
     <ClInclude Include="allegro.h" />
     <ClInclude Include="basicLCD.h" />
+    <ClInclude Include="micholcd.h" />
     <ClInclude Include="mylcd.h" />
     <ClInclude Include="PanaLCD.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="7SDD.TTF" />
+    <Font Include="fuentemicho.TTF" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

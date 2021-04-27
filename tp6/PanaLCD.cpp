@@ -76,7 +76,7 @@ basicLCD& PanaLCD::operator<<(const char* c)
     else
     {
         this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, auxString.length(), auxString);
-        cursorPos.row += auxString.length() / rowQuant;
+        cursorPos.row += auxString.length() / columnQuant;
         cursorPos.column += auxString.length() % columnQuant;
     }
     redraw();

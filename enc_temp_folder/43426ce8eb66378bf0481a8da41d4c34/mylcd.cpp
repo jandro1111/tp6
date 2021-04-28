@@ -71,7 +71,8 @@ basicLCD& mylcd::operator<<( const unsigned char c)
 basicLCD& mylcd::operator<<(const char* c)
 {
 	for (int i = 0; c[i] != '\0';++i) {
-		if ((this->cursor.row == (FILMAX-1) && this->cursor.column==(COLMAX-1))&& this->disp[this->cursor.row][this->cursor.column]!='/0') {//si tengo el display lleno
+		if ((this->cursor.row==(FILMAX-1)&& this->cursor.column==(COLMAX-1))&& this->disp[this->cursor.row][this->cursor.column]!='/0') {//si tengo el display lleno
+			//this->dispmoveleft();
 			this->cursor.column = 0;
 			this->cursor.row = 0;
 			this->disp[this->cursor.row][this->cursor.column] = c[i];

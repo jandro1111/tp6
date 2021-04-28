@@ -36,7 +36,7 @@ lcdError& micholcd::lcdGetError() {
 //Limpio display
 bool micholcd::lcdClear() {
 	for (int i = 0; i < MAX; ++i) {
-		display[i]= 0;
+		display[i] = 0;
 	}
 	cursor.column = 0;
 	cursor.row = 0;
@@ -46,8 +46,8 @@ bool micholcd::lcdClear() {
 
 //Borrra hasta el cursor
 bool micholcd::lcdClearToEOL() {
-	for (int i = cursor.column; i < (MAX/2); ++i) {
-		display[cursor.row * (MAX/2) + i] = 0;
+	for (int i = cursor.column; i < (MAX / 2); ++i) {
+		display[cursor.row * (MAX / 2) + i] = 0;
 	}
 	cursor.column = 0;
 	redraw();
@@ -57,9 +57,9 @@ bool micholcd::lcdClearToEOL() {
 
 basicLCD& micholcd::operator<<(const unsigned char word)
 {
-	if ((this->cursor.row == 1) && (this->cursor.column == ((MAX / 2)-1))) {
+	if ((this->cursor.row == 1) && (this->cursor.column == ((MAX / 2) - 1))) {
 		if ((word >= 32) && (word <= 126)) {
-			this->display[MAX-1] = word;
+			this->display[MAX - 1] = word;
 			this->cursor.column = 0;
 			this->cursor.row = 0;
 		}
@@ -98,30 +98,62 @@ basicLCD& micholcd::operator<<(const unsigned char word)
 
 basicLCD& micholcd::operator<<(const char* word)
 {
-	for (int i = 0; word[i] != '\0'; i++) {
-		if ((this->cursor.row == 1 && this->cursor.column == ((MAX/2) - 1)) && this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] != '/0') {
-			this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
-			this->cursor.column = 0;
-			this->cursor.row = 0;
-			this->lcdClear();
-			this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] = word[i];
-			if (this->lcdMoveCursorRight()) {
+	int len = strlen(word);
+	int var = 1;
+	if (len >= MAX) {
+		int len_inicio = len - MAX;
+		for (int i = len_inicio; (i < len) && var; i++) {
+			if ((this->cursor.row == 1 && this->cursor.column == ((MAX / 2) - 1)) && this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] != '/0') {
+				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
+				var = 0;
+				if (this->lcdMoveCursorRight()) {
+				}
+				else if (this->lcdMoveCursorDown()) {
+					this->cursor.column = 0;
+				}
+				else {
+					this->cursor.row = 0;
+					this->cursor.column = 0;
+				}
 			}
 			else {
-				this->lcdMoveCursorDown();
-				this->cursor.column = 0;
-			}
-		}
-		else {
-			this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
-			if (this->lcdMoveCursorRight()) {
-			}
-			else {
-				this->lcdMoveCursorDown();
-				this->cursor.column = 0;
+				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
+				if (this->lcdMoveCursorRight()) {
+				}
+				else {
+					this->lcdMoveCursorDown();
+					this->cursor.column = 0;
+				}
 			}
 		}
 	}
+	else {
+		for (int i = 0; (word[i] != '\0') && var; i++) {
+			if ((this->cursor.row && this->cursor.column == ((MAX / 2) - 1)) && this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] != '/0') {
+				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
+				var = 0;
+				if (this->lcdMoveCursorRight()) {
+				}
+				else if (this->lcdMoveCursorDown()) {
+					this->cursor.column = 0;
+				}
+				else {
+					this->cursor.row = 0;
+					this->cursor.column = 0;
+				}
+			}
+			else {
+				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
+				if (this->lcdMoveCursorRight()) {
+				}
+				else {
+					this->lcdMoveCursorDown();
+					this->cursor.column = 0;
+				}
+			}
+		}
+	}
+
 	redraw();
 	return *this;
 }
@@ -212,7 +244,7 @@ cursorPosition micholcd::lcdGetCursorPosition() {
 
 
 
-void micholcd::redraw(){
+void micholcd::redraw() {
 
 	al_clear_to_color(al_map_rgb(0, 0, 255));
 
@@ -221,16 +253,16 @@ void micholcd::redraw(){
 
 	/*LCD*/
 	for (int j = 0; j < 70; j++) {
-		al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), 40 * (MAX / 2)+10, j, ALLEGRO_ALIGN_LEFT, "%c", 'l');
+		al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), 40 * (MAX / 2) + 10, j, ALLEGRO_ALIGN_LEFT, "%c", 'l');
 	}
 	for (int j = 0; j < 72; j++) {
 		al_draw_textf(fuentemicho, al_map_rgb(0, 0, 0), 40 * (MAX / 2) + 15, j, ALLEGRO_ALIGN_LEFT, "%c", 'l');
 	}
-	for (int j = 0; j < 40 * (MAX / 2)-4; j++) {
+	for (int j = 0; j < 40 * (MAX / 2) - 4; j++) {
 		al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), j, 70, ALLEGRO_ALIGN_LEFT, "%c", '_');
 	}
-	for (int j = 0; j < 40 * (MAX / 2)+4; j++) {
-		al_draw_textf(fuentemicho, al_map_rgb(0, 0, 0), j,72, ALLEGRO_ALIGN_LEFT, "%c", '_');
+	for (int j = 0; j < 40 * (MAX / 2) + 4; j++) {
+		al_draw_textf(fuentemicho, al_map_rgb(0, 0, 0), j, 72, ALLEGRO_ALIGN_LEFT, "%c", '_');
 	}
 	///
 
@@ -244,14 +276,14 @@ void micholcd::redraw(){
 			al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), word_column_now, 0, ALLEGRO_ALIGN_LEFT, "%c", display[i]);
 		}
 		else {
-			word_column_now -= 40 * (MAX/2);
+			word_column_now -= 40 * (MAX / 2);
 			al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), word_column_now, 46, ALLEGRO_ALIGN_LEFT, "%c", display[i]);
 		}
-		
+
 	}
 	cout << endl;
 	float cursor_x_now = (float)(40 * (this->cursor.column));
-	float cursor_y_now = (float)(40 * (this->cursor.row)+17);
+	float cursor_y_now = (float)(40 * (this->cursor.row) + 17);
 	al_draw_textf(fuentemicho, al_map_rgb(0, 0, 0), cursor_x_now, cursor_y_now, ALLEGRO_ALIGN_LEFT, "%c", curse);
 
 	al_flip_display();

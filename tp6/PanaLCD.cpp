@@ -70,13 +70,17 @@ basicLCD& PanaLCD::operator<<(const char* c)
     std::string auxString(c);
     if (auxString.length() > (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)))
     {
-        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1, auxString, auxString.length() - (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)) - 1, auxString.length());
-        cursorPos = cursorPosition{ 1, 1 };
+        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1,
+            rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1,
+            auxString,
+            auxString.length() - (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)) - 1,
+            auxString.length());
+        cursorPos = cursorPosition{ rowQuant, columnQuant };
     }
     else
     {
         this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, auxString.length(), auxString);
-        cursorPos.row += auxString.length() / rowQuant;
+        cursorPos.row += auxString.length() / columnQuant;
         cursorPos.column += auxString.length() % columnQuant;
     }
     redraw();
@@ -173,5 +177,7 @@ bool PanaLCD::redraw()
     }
     al_draw_text(font, al_map_rgb(0, 0, 255), screenOffsetX + (cursorPos.column - 1) * al_get_text_width(font, " "), screenOffsetY + (cursorPos.row - 1) * al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, lcdText.substr((cursorPos.row - 1) * columnQuant + cursorPos.column - 1, 1).c_str());
     al_flip_display();
+
+    std::cout << lcdText << std::endl;
     return false;
 }

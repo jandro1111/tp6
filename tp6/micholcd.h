@@ -24,7 +24,6 @@ public:
 	virtual cursorPosition lcdGetCursorPosition();
 	virtual basicLCD& operator<<(const unsigned char word);
 	virtual basicLCD& operator<<(const char* word);
-	void dispmoveleft(void);//corre todos los caracteres del display uno a la izquierda (0,0), y el de mas a la izquierda lo desaparece
 
 private:
 	cursorPosition cursor;

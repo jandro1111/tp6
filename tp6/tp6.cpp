@@ -16,8 +16,8 @@ int main()
         mylcd prueba2;
         micholcd prueba3;
         basicLCD* lcds[3] = { (basicLCD*)&prueba, (basicLCD*)&prueba2, (basicLCD*)&prueba3 };//(basicLCD*)&prueba3
-
-
+        
+        
         //lcd de micho//
         *lcds[2] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
         al_rest(2.0); 
@@ -35,11 +35,11 @@ int main()
         lcds[2]->lcdClear();
         *lcds[2] << "esto anda bien";
         al_rest(5.0);
+        
 
 
 
-
-
+        
         //lcd de agus//
         *lcds[0] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
         al_rest(2.0);
@@ -57,9 +57,10 @@ int main()
         lcds[0]->lcdClear();
         *lcds[0] << "esto anda bien";
         al_rest(5.0);
-
+        
 
         //lcd de jandro//
+        
         *lcds[1] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
         al_rest(2.0);
         *lcds[1] << 'h' << 'h' << 'h' << 'h';

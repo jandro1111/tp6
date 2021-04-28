@@ -50,45 +50,44 @@ bool mylcd::lcdClearToEOL() {
 }
 basicLCD& mylcd::operator<<( const unsigned char c)
 {
-	if ((this->cursor.row==(FILMAX-1)) && (this->cursor.column==(COLMAX-1))) {//no avanzo el cursor
-		if ((c >= ' ') && (c <= '~')) {//si es un caracter imprimible
-			this->disp[this->cursor.row][this->cursor.column] = c;
+	if ((c >= ' ') && (c <= '~')) {//si es un caracter imprimible
+		this->disp[this->cursor.row][this->cursor.column] = c;
+		if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
 		}
-	}else{//modifico el cursor
-		if ((c >= ' ') && (c <= '~')) {//si es un caracter imprimible
-			this->disp[this->cursor.row][this->cursor.column] = c;
-			if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
-			}
-			else {//si no lo muevo abajo
-				this->lcdMoveCursorDown();
+		else {//si no lo muevo abajo
+			if (this->lcdMoveCursorDown()) {
 				this->cursor.column = 0;
 			}
+			else {//si no sigo por el 0 0
+				this->cursor.column = 0;
+				this->cursor.row = 0;
+			}			
 		}
+		printdisp();
 	}
-	printdisp();
 	return *this;
 }
 basicLCD& mylcd::operator<<(const char* c)
 {
+	int ini = 0;
+	int counter = 0;
 	for (int i = 0; c[i] != '\0';++i) {
-		if ((this->cursor.row == (FILMAX-1) && this->cursor.column==(COLMAX-1))&& this->disp[this->cursor.row][this->cursor.column]!='/0') {//si tengo el display lleno
-			this->cursor.column = 0;
-			this->cursor.row = 0;
-			this->disp[this->cursor.row][this->cursor.column] = c[i];
-			if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
-			}
-			else {//si no lo muevo abajo
-				this->lcdMoveCursorDown();
-				this->cursor.column = 0;
-			}
+		++counter;
+	}
+	if (counter > FILMAX * COLMAX) {
+		ini = (counter - FILMAX * COLMAX);
+	}
+	for (; c[ini] != '\0';++ini) {
+		this->disp[this->cursor.row][this->cursor.column] = c[ini];
+		if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
 		}
-		else {
-			this->disp[this->cursor.row][this->cursor.column] = c[i];
-			if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
-			}
-			else {//si no lo muevo abajo
-				this->lcdMoveCursorDown();
+		else {//si no lo muevo abajo
+			if (this->lcdMoveCursorDown()) {
 				this->cursor.column = 0;
+			}
+			else {//si no sigo por el 0 0
+				this->cursor.column = 0;
+				this->cursor.row = 0;
 			}
 		}
 	}
@@ -189,6 +188,7 @@ void mylcd::printdisp() {
 				aux1 += disp[i][j];
 			}
 		}
+		cout << endl;
 	}
 	cout << endl;
 	al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());

@@ -58,26 +58,20 @@ int main()
 
         //lcd de jandro//
         *lcds[1] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        prueba2.printdisp();
         al_rest(2.0);
         *lcds[1] << 'h' << 'o' << 'l' << 'a';
         prueba2.lcdSetCursorPosition(cursorPosition{ 1, 4 });
-        prueba2.printdisp();
         al_rest(2.0);        
         *lcds[1] << "pepefrgygfhfghffgb,bmbmbmbmbmbh";
-        prueba2.printdisp();
         al_rest(2.0);
         lcds[1]->lcdMoveCursorUp();
         lcds[1]->lcdSetCursorPosition(cursorPosition{ 0, 4 });
         lcds[1]->lcdClearToEOL();
         *lcds[1] << "algo";
-        prueba2.printdisp();
         al_rest(2.0);
         lcds[1]->lcdClear();
         *lcds[1] << "esto anda bien";
-        prueba2.printdisp();
         al_rest(2.0);
-        prueba2.printcursor();
 
         destroy_allegro();
     }

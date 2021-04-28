@@ -24,7 +24,7 @@ lcdError& PanaLCD::lcdGetError()
 bool PanaLCD::lcdClear()
 {
     this->lcdText.replace(0 , this->rowQuant * this->columnQuant, this->rowQuant * this->columnQuant, ' ');
-    this->cursorPos = cursorPosition{ 1, 1 };
+    this->cursorPos = cursorPosition{ 0, 0 };
     this->redraw();
     return true;
 }
@@ -33,7 +33,7 @@ bool PanaLCD::lcdClearToEOL()
 {
     try
     {
-        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, this->columnQuant - this->cursorPos.column + 1, this->columnQuant - this->cursorPos.column + 1, ' ');
+        this->lcdText.replace((this->cursorPos.row * columnQuant + this->cursorPos.column), this->columnQuant - this->cursorPos.column, this->columnQuant - this->cursorPos.column, ' ');
     }
     catch (const std::exception&)
     {
@@ -47,17 +47,23 @@ bool PanaLCD::lcdClearToEOL()
 
 basicLCD& PanaLCD::operator<<(const unsigned char c)
 {
-    this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, 1, 1, c);
+    unsigned char auxChar = c;
+    if (c > 126 || c < 32)
+    {
+        auxChar = ' ';
+    }
+
+    this->lcdText.replace(this->cursorPos.row * columnQuant + this->cursorPos.column, 1, 1, auxChar);
 
     if (!this->lcdMoveCursorRight())
     {
         if (this->lcdMoveCursorDown())
         {
-            cursorPos.column = 1;
+            cursorPos.column = 0;
         }
         else
         {
-            cursorPos = cursorPosition{ 1, 1 };
+            cursorPos = cursorPosition{ 0, 0 };
         }
     }
 
@@ -68,18 +74,18 @@ basicLCD& PanaLCD::operator<<(const unsigned char c)
 basicLCD& PanaLCD::operator<<(const char* c)
 {
     std::string auxString(c);
-    if (auxString.length() > (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)))
+    if (auxString.length() > (rowQuant * columnQuant - (this->cursorPos.row * columnQuant + this->cursorPos.column + 1)))
     {
-        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1,
-            rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) + 1,
+        this->lcdText.replace((this->cursorPos.row * columnQuant + this->cursorPos.column),
+            rowQuant * columnQuant - (this->cursorPos.row * columnQuant + this->cursorPos.column),
             auxString,
-            auxString.length() - (rowQuant * columnQuant - ((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column)) - 1,
+            auxString.length() - (rowQuant * columnQuant - (this->cursorPos.row * columnQuant + this->cursorPos.column)), //- 2,
             auxString.length());
-        cursorPos = cursorPosition{ rowQuant, columnQuant };
+        cursorPos = cursorPosition{ rowQuant-1, columnQuant-1 };
     }
     else
     {
-        this->lcdText.replace(((this->cursorPos.row - 1) * columnQuant + this->cursorPos.column) - 1, auxString.length(), auxString);
+        this->lcdText.replace((this->cursorPos.row * columnQuant + this->cursorPos.column), auxString.length(), auxString);
         cursorPos.row += auxString.length() / columnQuant;
         cursorPos.column += auxString.length() % columnQuant;
     }
@@ -89,7 +95,7 @@ basicLCD& PanaLCD::operator<<(const char* c)
 
 bool PanaLCD::lcdMoveCursorUp()
 {
-    if (cursorPos.row == 1 )
+    if (cursorPos.row == 0 )
     {
         return false;
     }
@@ -97,13 +103,12 @@ bool PanaLCD::lcdMoveCursorUp()
     {
         cursorPos.row--;
     }
-    redraw();
     return true;
 }
 
 bool PanaLCD::lcdMoveCursorDown()
 {
-    if (cursorPos.row == rowQuant)
+    if (cursorPos.row == rowQuant-1)
     {
         return false;
     }
@@ -111,13 +116,12 @@ bool PanaLCD::lcdMoveCursorDown()
     {
         cursorPos.row++;
     }
-    redraw();
     return true;
 }
 
 bool PanaLCD::lcdMoveCursorRight()
 {
-    if (cursorPos.column == columnQuant)
+    if (cursorPos.column == columnQuant-1)
     {
         return false;
     }
@@ -125,13 +129,12 @@ bool PanaLCD::lcdMoveCursorRight()
     {
         cursorPos.column++;
     }
-    redraw();
     return true;
 }
 
 bool PanaLCD::lcdMoveCursorLeft()
 {
-    if (cursorPos.column == 1)
+    if (cursorPos.column == 0)
     {
         return false;
     }
@@ -139,13 +142,12 @@ bool PanaLCD::lcdMoveCursorLeft()
     {
         cursorPos.column--;
     }
-    redraw();
     return true;
 }
 
 bool PanaLCD::lcdSetCursorPosition(const cursorPosition pos)
 {
-    if ((pos.row <= 0 || pos.row > rowQuant) || (pos.column <= 0 || pos.column > columnQuant))
+    if ((pos.row < 0 || pos.row >= rowQuant) || (pos.column < 0 || pos.column >= columnQuant))
     {
         return false;
     }
@@ -175,7 +177,7 @@ bool PanaLCD::redraw()
         auxStr = this->lcdText.substr(i * columnQuant, columnQuant);
         al_draw_text(font, al_map_rgb(0, 0, 0), screenOffsetX, screenOffsetY + i* al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, auxStr.c_str());
     }
-    al_draw_text(font, al_map_rgb(0, 0, 255), screenOffsetX + (cursorPos.column - 1) * al_get_text_width(font, " "), screenOffsetY + (cursorPos.row - 1) * al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, lcdText.substr((cursorPos.row - 1) * columnQuant + cursorPos.column - 1, 1).c_str());
+    al_draw_text(font, al_map_rgb(0, 0, 255), screenOffsetX + cursorPos.column * al_get_text_width(font, " "), screenOffsetY + cursorPos.row * al_get_font_line_height(font), ALLEGRO_ALIGN_LEFT, lcdText.substr(cursorPos.row * columnQuant + cursorPos.column, 1).c_str());
     al_flip_display();
 
     std::cout << lcdText << std::endl;

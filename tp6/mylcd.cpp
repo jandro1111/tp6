@@ -36,6 +36,7 @@ bool mylcd::lcdClear() {
 	}
 	cursor.column = 0;
 	cursor.row = 0;
+	printdisp();
 	return succed;
 }
 bool mylcd::lcdClearToEOL() {
@@ -44,6 +45,7 @@ bool mylcd::lcdClearToEOL() {
 		disp[cursor.row][j] = 0;
 	}
 	cursor.column = 0;
+	printdisp();
 	return succed;
 }
 basicLCD& mylcd::operator<<( const unsigned char c)
@@ -63,6 +65,7 @@ basicLCD& mylcd::operator<<( const unsigned char c)
 			}
 		}
 	}
+	printdisp();
 	return *this;
 }
 basicLCD& mylcd::operator<<(const char* c)
@@ -90,6 +93,7 @@ basicLCD& mylcd::operator<<(const char* c)
 			}
 		}
 	}
+	printdisp();
 	return *this;
 }
 
@@ -164,6 +168,7 @@ bool mylcd::lcdSetCursorPosition(const cursorPosition pos) {
 			cursor.column = pos.column;
 		}
 	}
+	printdisp();
 	return succed;
 }
 cursorPosition mylcd::lcdGetCursorPosition() {
@@ -185,8 +190,8 @@ void mylcd::printdisp() {
 				aux1 += disp[i][j];
 			}
 		}
-		cout << endl;
 	}
+	cout << endl;
 	al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
 	al_draw_text(font, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();

@@ -210,8 +210,8 @@ void micholcd::redraw(){
 		else {
 			tem += display[i];
 		}
-		cout << endl;
 	}
+	cout << endl;
 	al_clear_to_color(al_map_rgb(0, 0,255));
 	ALLEGRO_FONT* fuentemicho = NULL;
 	fuentemicho = al_load_ttf_font("fuentemicho.TTF", 40, 0);

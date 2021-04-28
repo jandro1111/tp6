@@ -5,6 +5,8 @@
 #include "basicLCD.h"
 #include "allegro.h"
 
+#define FONTPATH "7SDD.ttf"
+
 class PanaLCD :
     public basicLCD
 {
@@ -12,6 +14,7 @@ public:
     // Inherited via basicLCD
 
     PanaLCD(int rows, int columns, int offsetX, int offsetY);
+    ~PanaLCD();
 
     virtual bool lcdInitOk() override;
     virtual lcdError& lcdGetError() override;
@@ -30,6 +33,7 @@ private:
 
     bool redraw();
 
+    ALLEGRO_FONT* font;
     cursorPosition cursorPos;
     lcdError error;
     int rowQuant;

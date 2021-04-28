@@ -1,26 +1,25 @@
 #include "micholcd.h"
 using namespace std;
 
-/*
-basicLCD::basicLCD() {
 
-}
-basicLCD::~basicLCD() {
-
-}
-*/
 /// micho lcd Constructor
-micholcd::micholcd() {
+micholcd::micholcd() : share("OK", "Ok", OK){
 	cursor.column = 0;
 	cursor.row = 0;
 	for (int i = 0; i < MAX; ++i) {
 		display[i] = 0;
 	}
+	fuentemicho = al_load_ttf_font(FONTPATHMICHO, 36, 0);
+	if (fuentemicho == NULL)
+	{
+		share = lcdError("INITERR", "Error al cargar fuente", INITERR);
+	}
+
 }
 
 //Destructor
 micholcd::~micholcd() {
-
+	al_destroy_font(fuentemicho);
 }
 
 //OK?
@@ -49,7 +48,6 @@ bool micholcd::lcdClearToEOL() {
 	for (int i = cursor.column; i < (MAX / 2); ++i) {
 		display[cursor.row * (MAX / 2) + i] = 0;
 	}
-	cursor.column = 0;
 	redraw();
 	return true;
 }
@@ -106,15 +104,9 @@ basicLCD& micholcd::operator<<(const char* word)
 			if ((this->cursor.row == 1 && this->cursor.column == ((MAX / 2) - 1)) && this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] != '/0') {
 				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
 				var = 0;
-				if (this->lcdMoveCursorRight()) {
-				}
-				else if (this->lcdMoveCursorDown()) {
-					this->cursor.column = 0;
-				}
-				else {
-					this->cursor.row = 0;
-					this->cursor.column = 0;
-				}
+				
+				this->cursor.column = 0;
+				this->cursor.row = 0;
 			}
 			else {
 				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
@@ -128,10 +120,9 @@ basicLCD& micholcd::operator<<(const char* word)
 		}
 	}
 	else {
-		for (int i = 0; (word[i] != '\0') && var; i++) {
+		for (int i = 0; (word[i] != '\0'); i++) {
 			if ((this->cursor.row && this->cursor.column == ((MAX / 2) - 1)) && this->display[(this->cursor.row * MAX / 2) + (this->cursor.column)] != '/0') {
 				this->display[(this->cursor.row * (MAX / 2)) + (this->cursor.column)] = word[i];
-				var = 0;
 				if (this->lcdMoveCursorRight()) {
 				}
 				else if (this->lcdMoveCursorDown()) {
@@ -248,9 +239,6 @@ void micholcd::redraw() {
 
 	al_clear_to_color(al_map_rgb(0, 0, 255));
 
-	ALLEGRO_FONT* fuentemicho = NULL;
-	fuentemicho = al_load_ttf_font("fuentemicho.TTF", 40, 0);
-
 	/*LCD*/
 	for (int j = 0; j < 70; j++) {
 		al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), 40 * (MAX / 2) + 10, j, ALLEGRO_ALIGN_LEFT, "%c", 'l');
@@ -269,6 +257,7 @@ void micholcd::redraw() {
 	/*WORDS*/
 	char curse = '_';
 
+	cout << " * ";
 	for (int i = 0; i < MAX; ++i) {
 		float word_column_now = (float)(40 * i);
 		cout << display[i];
@@ -279,9 +268,14 @@ void micholcd::redraw() {
 			word_column_now -= 40 * (MAX / 2);
 			al_draw_textf(fuentemicho, al_map_rgb(255, 255, 255), word_column_now, 46, ALLEGRO_ALIGN_LEFT, "%c", display[i]);
 		}
-
+#ifdef _DEBUG
+		if (i == MAX/2 - 1)
+		{
+			cout << endl << " * ";
+		}
+#endif // DEBUG
 	}
-	cout << endl;
+	cout << endl << endl;
 	float cursor_x_now = (float)(40 * (this->cursor.column));
 	float cursor_y_now = (float)(40 * (this->cursor.row) + 17);
 	al_draw_textf(fuentemicho, al_map_rgb(0, 0, 0), cursor_x_now, cursor_y_now, ALLEGRO_ALIGN_LEFT, "%c", curse);

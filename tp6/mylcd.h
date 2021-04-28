@@ -5,8 +5,10 @@
 #include<iostream>
 #include"allegro.h"
 #include"basicLCD.h"
+
 #define FILMAX 2
 #define COLMAX 16
+#define FONTPATH "7SDD.ttf"
 
 class mylcd :public basicLCD {
 public:
@@ -24,10 +26,12 @@ public:
 	cursorPosition lcdGetCursorPosition();
 	basicLCD& operator<<(const unsigned char c);//este el de char
 	basicLCD& operator<<(const char* c);//este es el de string
-	void printdisp(void);
-	void dispmoveleft(void);//corre todos los caracteres del display uno a la izquierda (0,0), y el de mas a la izquierda lo desaparece
-	void printcursor(void);
+	
 private:
+
+	void printdisp(void);
+
+	ALLEGRO_FONT* font;
 	cursorPosition cursor;//row 0-1 column 0-19
 	lcdError estado;
 	char disp[FILMAX][COLMAX];

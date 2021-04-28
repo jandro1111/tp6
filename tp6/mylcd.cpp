@@ -1,15 +1,8 @@
 #include "mylcd.h"
 using namespace std;
-/// basic lcd
 
-basicLCD::basicLCD() {
-
-}
-basicLCD::~basicLCD() {
-
-}
 /// my lcd
-mylcd::mylcd() {
+mylcd::mylcd() : estado("OK", "Ok", OK) {
 	cursor.column = 0;
 	cursor.row = 0;
 	for (int i = 0; i < FILMAX; ++i) {
@@ -17,9 +10,14 @@ mylcd::mylcd() {
 			disp[i][j] = 0;
 		}
 	}
+	font = al_load_ttf_font(FONTPATH, 36, 0);
+	if (font == NULL)
+	{
+		estado = lcdError("INITERR", "Error al cargar fuente", INITERR);
+	}
 }
 mylcd::~mylcd() {
-
+	al_destroy_font(font);
 }
 bool mylcd::lcdInitOk() {
 	return 1;
@@ -44,7 +42,6 @@ bool mylcd::lcdClearToEOL() {
 	for (int j = cursor.column; j < COLMAX; ++j) {
 		disp[cursor.row][j] = 0;
 	}
-	cursor.column = 0;
 	printdisp();
 	return succed;
 }
@@ -79,9 +76,8 @@ basicLCD& mylcd::operator<<(const char* c)
 	}
 	for (; c[ini] != '\0';++ini) {
 		this->disp[this->cursor.row][this->cursor.column] = c[ini];
-		if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
-		}
-		else {//si no lo muevo abajo
+		if (!this->lcdMoveCursorRight()) //si no pude moverlo a la derecha
+		{//lo muevo abajo
 			if (this->lcdMoveCursorDown()) {
 				this->cursor.column = 0;
 			}
@@ -179,6 +175,7 @@ void mylcd::printdisp() {
 	ALLEGRO_FONT* font = NULL;
 	font = al_load_ttf_font("7SDD.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA :frowning: 
 	for (int i = 0; i < FILMAX; ++i) {
+		cout << " * ";
 		for (int j = 0; j < COLMAX; ++j) {
 			cout << disp[i][j];
 			if (i == 0) {
@@ -190,43 +187,9 @@ void mylcd::printdisp() {
 		}
 		cout << endl;
 	}
-	cout << endl;
+	cout << endl << endl;
 	al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
 	al_draw_text(font, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();
 }
-void mylcd::dispmoveleft() {
-	for (int i = 0; i < FILMAX; ++i) {
-		for (int j = 0; j < COLMAX; ++j) {
-			if (j + 1 == COLMAX) {
-				if (i + 1 == FILMAX) {//si estoy en el 1 19
-					disp[i][j] = 0;
-				}
-				else {//estoy en el 0 19
-					disp[i][j] = disp[i + 1][0];
-				}
-			}
-			else {
-				disp[i][j] = disp[i][j + 1];
-			}
-		}
-	}
-}
-void mylcd::printcursor() {
-	cout << "row: " << cursor.row << " column: " << cursor.column << endl;
-}
-// error lcd
-lcdError::lcdError() {
-	errorcode = 0;
-	errordesc = "OK";
-	errorname = "OK";
-}
-std::string lcdError::getErrorName() {
-	return errorname;
-}
-std::string lcdError::getErrorDescription() {
-	return errordesc;
-}
-unsigned long lcdError::getErrorCode() {
-	return errorcode;
-}
+

@@ -8,76 +8,53 @@
 using namespace std;
 int main()
 {
-    if (init_allegro()) {
-        cout << "fallo alegro init"<<endl;
+
+    ALLEGRO_DISPLAY* display;
+
+    if (init_allegro(display)) {
+        cout << "fallo alegro init" << endl;
+        return 0;
     }
     else {
-        PanaLCD prueba(2, 16, 100, 100);
-        mylcd prueba2;
-        micholcd prueba3;
-        basicLCD* lcds[3] = { (basicLCD*)&prueba, (basicLCD*)&prueba2, (basicLCD*)&prueba3 };//(basicLCD*)&prueba3
-        
-        
-        //lcd de micho//
-        *lcds[2] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        al_rest(2.0); 
-        *lcds[2] << 'h' << 'h' << 'h' << 'h';
-        al_rest(2.0);
-        lcds[2]->lcdSetCursorPosition(cursorPosition{ 1, 4 });     
-        *lcds[2] << "ppppppppppppppppppppppppppppppp";
-        al_rest(2.0);
-        lcds[2]->lcdMoveCursorUp();
-        lcds[2]->lcdSetCursorPosition(cursorPosition{ 0, 4 });
-        lcds[2]->lcdClearToEOL();
-        al_rest(2.0);
-        *lcds[2] << "llll";
-        al_rest(2.0);
-        lcds[2]->lcdClear();
-        *lcds[2] << "esto anda bien";
-        al_rest(5.0);
-        
 
+        basicLCD* lcds[3] = { new PanaLCD(2, 16, 0, 0), new mylcd(), new micholcd() };
 
-
-        
-        //lcd de agus//
-        *lcds[0] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        al_rest(2.0);
-        *lcds[0] << 'h' << 'h' << 'h' << 'h';
-        al_rest(2.0);
-        lcds[0]->lcdSetCursorPosition(cursorPosition{ 1, 4 });
-        *lcds[0] << "ppppppppppppppppppppppppppppppp";
-        al_rest(2.0);
-        lcds[0]->lcdMoveCursorUp();
-        lcds[0]->lcdSetCursorPosition(cursorPosition{ 0, 4 });
-        lcds[0]->lcdClearToEOL();
-        al_rest(2.0);
-        *lcds[0] << "llll";
-        al_rest(2.0);
-        lcds[0]->lcdClear();
-        *lcds[0] << "esto anda bien";
-        al_rest(5.0);
-        
-
-        //lcd de jandro//
-        
-        *lcds[1] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";
-        al_rest(2.0);
-        *lcds[1] << 'h' << 'h' << 'h' << 'h';
-        al_rest(2.0);
-        lcds[1]->lcdSetCursorPosition(cursorPosition{ 1, 4 });   
-        *lcds[1] << "ppppppppppppppppppppppppppppppp";
-        al_rest(2.0);
-        lcds[1]->lcdMoveCursorUp();
-        lcds[1]->lcdSetCursorPosition(cursorPosition{ 0, 4 });
-        lcds[1]->lcdClearToEOL();
-        *lcds[1] << "llll";
-        al_rest(2.0);
-        lcds[1]->lcdClear();
-        *lcds[1] << "esto anda bien";
-        al_rest(2.0);
-
-        destroy_allegro();
+        for (size_t i = 0; i < 3; i++)
+        {
+            //Ingreso cadena de 92 caracteres
+            cout << "Ingreso cadena de 92 caract. \"mucho texto This file contains the 'main' function.Program execution begins and ends there.\"" << endl;
+            *lcds[i] << "mucho texto This file contains the 'main' function. Program execution begins and ends there.";    
+            al_rest(4.0);
+            cout << "Inserto cuatro caracteres  \'h\' de a uno encadenando las inserciones. lcd << \'h\' << \'h\' << \'h\' << \'h\'" << endl;
+            *lcds[i] << 'h' << 'h' << 'h' << 'h';
+            al_rest(4.0);
+            cout << "Posiciono el cursor en la 2da fila 5ta columna e inserto una cadena con el abcedario(las 27 letras)" << endl;
+            lcds[i]->lcdSetCursorPosition(cursorPosition{ 1, 4 });
+            *lcds[i] << "abcdefghijklmnopqrstuvwxyz";
+            al_rest(4.0);
+            cout << "Muevo el cursor arriba y limpio la linea. Se limpia la 1ra fila desde la 15ta columna en adelante" << endl;
+            lcds[i]->lcdMoveCursorUp();
+            lcds[i]->lcdClearToEOL();
+            al_rest(4.0);
+            cout << "Muevo el cursor abajo y limpio la linea. Se limpia la 2ra fila desde la 15ta columna en adelante" << endl;
+            lcds[i]->lcdMoveCursorDown();
+            lcds[i]->lcdClearToEOL();
+            al_rest(4.0);
+            cout << "inserto una cadena \"llll\"" << endl;
+            *lcds[i] << "llll";
+            al_rest(4.0);
+            cout << "Limpio el display" << endl;
+            lcds[i]->lcdClear();
+            al_rest(4.0);
+            cout << "Inserto \"esto anda bien\"" << endl;
+            *lcds[i] << "esto anda bien";
+            cout << endl << "Cambiamos al siguiente display..." << endl;
+            al_rest(5.0);
+        }
+        destroy_allegro(display);
+        delete lcds[0];
+        delete lcds[1];
+        delete lcds[2];
     }
     return 0;
 }

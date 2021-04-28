@@ -10,10 +10,13 @@ struct cursorPosition
 	int row;
 	int column;
 };
+
+enum errorcodes_t {OK = 0, INITERR};
+
 class lcdError
 {
 public:
-	lcdError();
+	lcdError(std::string errorname_, std::string errordescription_, unsigned long errorcode_);
 	std::string getErrorName();
 	std::string getErrorDescription();
 	unsigned long getErrorCode();
@@ -41,7 +44,7 @@ public:
 	* que se hubiera tomado de forma de evitar
 	* "resources leak".
 	*=====================================================*/
-	~basicLCD();
+	virtual ~basicLCD();
 	/*=====================================================
 	* Name: lcdInitOk
 	* Entra: -

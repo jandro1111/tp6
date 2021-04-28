@@ -6,6 +6,7 @@
 #include"allegro.h"
 #include"basicLCD.h"
 
+#define FONTPATHMICHO "fuentemicho.TTF"
 #define MAX 32
 
 class micholcd :public basicLCD {
@@ -30,6 +31,7 @@ private:
 	lcdError share;
 	char display[MAX];
 	void redraw();
+	ALLEGRO_FONT* fuentemicho;
 };
 
 
